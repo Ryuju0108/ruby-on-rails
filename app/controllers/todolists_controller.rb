@@ -10,13 +10,41 @@ class TodolistsController < ApplicationController
 
   	# DBへ保存する
   	list.save
-  	# トップ画面へリダイレクト
-  	redirect_to top_path
-
+  	# トップ画面へリダイレクト  top_path
+  	redirect_to todolist_path(list.id)
+ # 詳細画面へリダイレクト
   end
+
+  def index
+  	@lists = List.all
+  end
+
+  def show
+  	@list = List.find(params[:id])
+  end
+
+  def edit
+  	@list = List.find(params[:id])
+  end
+
+  def destroy
+  	list = List.find(params[:id])
+  	#データ(レコード)を1件取得
+  	list.destroy
+  	#データ（レコード）を削除
+  	redirect_to todolists_path
+  	#List一覧画面へリダイレクト
+  end
+
+  def update
+  	list = List.find(params[:id])
+  	list.update(list_params)
+  	redirect_to todolists_path(list.id)
+  end
+
   private
 # ここから下はcontrollerの中でしか呼び出せません
   def list_params
-  	params.require(:list).permit(:title, :body)
+  	params.require(:list).permit(:title, :body, :image)
   end
 end
